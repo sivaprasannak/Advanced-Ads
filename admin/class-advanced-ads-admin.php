@@ -99,6 +99,8 @@ class Advanced_Ads_Admin {
 
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 
+		add_action( 'admin_post_deactivate_plugin', array( $this, 'advanced_ads_deactivate_plugin' ));
+		
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 9 );
@@ -382,6 +384,55 @@ class Advanced_Ads_Admin {
 			// allow other Advanced Ads plugins to show admin notices at this late stage
 			do_action( 'advanced-ads-admin-notices');
 		}
+
+		// Deactivate all plugins who can cause conflicts with Advanced Ads.
+		$plugins = array(
+			'ads-txt'                                    => 'ads-txt/ads-txt.php',
+			'ads-txt-admin'                              => 'ads-txt-admin/unveil-media-ads-txt.php',
+			'ads-txt-manager'                            => 'ads-txt-manager/adstxtmanager.php',
+			'authorized-sellers-manager'                 => 'authorized-sellers-manager/ads-txt-publisher.php',
+			'monetizemore-ads-txt'                       => 'monetizemore-ads-txt/wp-ads-txt.php',
+			'simple-ads-txt'                             => 'simple-ads-txt/bs_ads_txt.php',
+		);
+	
+	
+		$plugins = apply_filters( 'advanced_ads_plugins_to_deactivate', $plugins );
+
+		$plugins = array_filter( $plugins, 'is_plugin_active' );
+
+		if ( current_user_can( 'manage_options' )
+			&& count( $plugins )
+		) { ?>
+
+			<div class="error">
+				<p><?php echo( __( '<strong>Advanced Ads</strong>: The following plugins are not compatible with this plugin and may cause unexpected results:', 'advanced-ads' )); ?></p>
+				<ul class="advanced_ads-plugins-error">
+				<?php
+				foreach ( $plugins as $plugin ) {
+					$plugin_data = get_plugin_data( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $plugin );
+					echo '<li>' . $plugin_data['Name'] . '</span> <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( $plugin ) ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'rocket' ) . '</a></li>';
+
+				}
+				?>
+				</ul>
+			</div>
+
+		<?php
+		}
+	}
+
+	/**
+     * Deativate plugins
+    */
+	public function advanced_ads_deactivate_plugin() {
+		if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'deactivate_plugin' ) ) {
+			wp_nonce_ays( '' );
+		}
+	
+		deactivate_plugins( $_GET['plugin'] );
+	
+		wp_safe_redirect( wp_get_referer() );
+		die();
 	}
 
 	/**

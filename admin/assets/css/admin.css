@@ -454,3 +454,7 @@ tr:hover .on-hover { display: block; }
 
 /* manual link without underline (e.g., when icon is used )*/
 a.advads-manual-icon { text-decoration: none; }
+
+/* admin notices alignment */
+.advanced_ads-plugins-error{overflow:hidden; padding-left:20px; list-style-type:disc}
+.advanced_ads-plugins-error li{width:280px; line-height:25px}
