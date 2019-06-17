@@ -270,5 +270,41 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 			'hide'    => false,
 			'timeout' => YEAR_IN_SECONDS,
 		),
+		'ads_txt_manager'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Manager is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br> Ads.txt Manager <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt/ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
+		'ads_txt_admin'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Admin is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br> Ads.txt Admin <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt-admin/unveil-media-ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
+		'simple_ads_txt'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Simple ads.txt is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br>Simple ads.txt <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'simple-ads-txt/bs_ads_txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
+		'adstxtmanager'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Manager is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br>Ads.txt Manager <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt-manager/adstxtmanager.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
+		'monetizemore'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br> Ads.txt <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'monetizemore-ads-txt/wp-ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
+		'ads_txt_publisher'                                      => array(
+			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Publisher is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
+							.'<br><br> Ads.txt Publisher <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'authorized-sellers-manager/ads-txt-publisher.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
+			'type'    => 'problem',
+			'hide'    => true,
+		),
 	)
 );

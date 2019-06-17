@@ -384,41 +384,7 @@ class Advanced_Ads_Admin {
 			// allow other Advanced Ads plugins to show admin notices at this late stage
 			do_action( 'advanced-ads-admin-notices');
 		}
-
-		// Deactivate all plugins who can cause conflicts with Advanced Ads.
-		$plugins = array(
-			'ads-txt'                                    => 'ads-txt/ads-txt.php',
-			'ads-txt-admin'                              => 'ads-txt-admin/unveil-media-ads-txt.php',
-			'ads-txt-manager'                            => 'ads-txt-manager/adstxtmanager.php',
-			'authorized-sellers-manager'                 => 'authorized-sellers-manager/ads-txt-publisher.php',
-			'monetizemore-ads-txt'                       => 'monetizemore-ads-txt/wp-ads-txt.php',
-			'simple-ads-txt'                             => 'simple-ads-txt/bs_ads_txt.php',
-		);
-	
-	
-		$plugins = apply_filters( 'advanced_ads_plugins_to_deactivate', $plugins );
-
-		$plugins = array_filter( $plugins, 'is_plugin_active' );
-
-		if ( current_user_can( 'manage_options' )
-			&& count( $plugins )
-		) { ?>
-
-			<div class="error">
-				<p><?php echo( __( '<strong>Advanced Ads</strong>: The following plugins are not compatible with this plugin and may cause unexpected results:', 'advanced-ads' )); ?></p>
-				<ul class="advanced_ads-plugins-error">
-				<?php
-				foreach ( $plugins as $plugin ) {
-					$plugin_data = get_plugin_data( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $plugin );
-					echo '<li>' . $plugin_data['Name'] . '</span> <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( $plugin ) ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'rocket' ) . '</a></li>';
-
-				}
-				?>
-				</ul>
-			</div>
-
-		<?php
-		}
+		
 	}
 
 	/**
