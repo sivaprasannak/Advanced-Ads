@@ -51,6 +51,9 @@ class Advanced_Ads_Admin_Ad_Type {
 		$this->post_type = constant( 'Advanced_Ads::POST_TYPE_SLUG' );
 
 		add_filter( 'gettext', array( $this, 'replace_cheating_message' ), 20, 2 );
+		
+		// Remove parent dropdown in ad edit
+		add_filter( 'wp_dropdown_cats', array( $this,  'remove_parent_categories_dropdown_ads'), 10, 2 );
 	}
 
 	/**
@@ -672,6 +675,17 @@ class Advanced_Ads_Admin_Ad_Type {
 		}
 
 		return $translated_text;
+	}
+	/**
+     * 
+     * Remove parent dropdown from custom taxonamy
+    */
+    public function remove_parent_categories_dropdown_ads( $output, $arguments)
+    {
+        if($arguments['name']=='newadvanced_ads_groups_parent'){
+            $output ='';
+        }
+        return $output;
 	}
 
 }
