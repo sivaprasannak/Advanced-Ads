@@ -1301,12 +1301,38 @@ class Advanced_Ads_AdSense_MAPI {
         $options = self::get_option();
         if ( isset( $options['accounts'][ $pub_id ] ) ) {
             if ( isset( $options['accounts'][ $pub_id ]['alerts'] ) && is_array( $options['accounts'][ $pub_id ]['alerts'] ) ) {
-                return $options['accounts'][ $pub_id ]['alerts'];
+                $alerts = $options['accounts'][ $pub_id ]['alerts'];
+                return self::filter_stored_account_alerts( $alerts );
             } else {
                 return array();
             }
         }
         return false;
+    }
+
+    /**
+     *  Remove unneeded stored alerts.
+     *
+     *  @param array $alerts Existing alerts.
+     *  @return array $alerts Modified allerts.
+     */
+    public static function filter_stored_account_alerts( array $alerts ) {
+        if ( empty( $alerts['items'] ) || ! is_array( $alerts['items'] ) ) {
+            return $alerts;
+        }
+
+        // Remove `ads.txt` related alerts if the file is displayed to visitors.
+        if ( Advanced_Ads_Ads_Txt_Admin::is_displayed() ) {
+            $ads_txt_alerts = array( 'ALERT_TYPE_ADS_TXT_UNAUTHORIZED', 'ADS_TXT_MISSING' );
+
+            foreach ( $alerts['items'] as $internal_id => $item ) {
+                if ( isset( $item['id'] ) && in_array( $item['id'], $ads_txt_alerts ) ) {
+                    unset( $alerts['items'][ $internal_id ] );
+                }
+            }
+        }
+
+        return $alerts;
     }
     
     /**

@@ -3,7 +3,7 @@
         <key name="advanced-ads">
             <key name="custom-label">
                 <key name="text" />
-            </key>
+          	</key>
         </key>
     </admin-texts>
 </wpml-config>

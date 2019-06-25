@@ -307,36 +307,6 @@ class Advanced_Ads_Ad_Health_Notices {
 		if ( Advanced_Ads_Checks::wp_engine_hosting() ) {
 			$this->add( 'wpengine' );
 		}
-		if ( is_plugin_active( 'ads-txt/ads-txt.php' ) ) {
-			$this->add( 'ads_txt_manager' );
-		} else {
-			$this->remove( 'ads_txt_manager' );
-		}
-		if ( is_plugin_active( 'ads-txt-admin/unveil-media-ads-txt.php' ) ) {
-			$this->add( 'ads_txt_admin' );
-		} else {
-			$this->remove( 'ads_txt_admin' );
-		}
-		if ( is_plugin_active( 'simple-ads-txt/bs_ads_txt.php' ) ) {
-			$this->add( 'simple_ads_txt' );
-		} else {
-			$this->remove( 'simple_ads_txt' );
-		}
-		if ( is_plugin_active( 'ads-txt-manager/adstxtmanager.php' ) ) {
-			$this->add( 'adstxtmanager' );
-		} else {
-			$this->remove( 'adstxtmanager' );
-		}
-		if ( is_plugin_active( 'monetizemore-ads-txt/wp-ads-txt.php' ) ) {
-			$this->add( 'monetizemore' );
-		} else {
-			$this->remove( 'monetizemore' );
-		}
-		if ( is_plugin_active( 'authorized-sellers-manager/ads-txt-publisher.php' ) ) {
-			$this->add( 'ads_txt_publisher' );
-		} else {
-			$this->remove( 'ads_txt_publisher' );
-		}
 
 		set_transient( self::DAILY_CHECK_TRANSIENT_NAME, true, DAY_IN_SECONDS );
 	}
@@ -366,7 +336,7 @@ class Advanced_Ads_Ad_Health_Notices {
 		}
 
 		$notice_key = esc_attr( $notice_key );
-		$options    = $this->options();
+		$options_before = $options = $this->options();
 
 		// load notices from "queue".
 		$notices = isset( $options['notices'] ) ? $options['notices'] : array();
@@ -409,9 +379,14 @@ class Advanced_Ads_Ad_Health_Notices {
 
 		$this->last_saved_notice_key = $notice_key;
 
-		// update db.
-		$options['notices'] = $this->notices = $notices;
-		$this->update_options( $options );
+		$options['notices'] = $notices;
+		// update db if changed.
+		if ( $options_before !== $options ) {
+			$this->update_options( $options );
+
+			// update already registered notices.
+			$this->load_notices();
+		}
 	}
 
 	/**
@@ -432,7 +407,7 @@ class Advanced_Ads_Ad_Health_Notices {
 
 		// check if the notice already exists.
 		$notice_key = esc_attr( $notice_key );
-		$options    = $this->options();
+		$options_before = $options = $this->options();
 
 		// load notices from "queue".
 		$notices = isset( $options['notices'] ) ? $options['notices'] : array();
@@ -457,8 +432,16 @@ class Advanced_Ads_Ad_Health_Notices {
 		}
 
 		// update db.
-		$options['notices'] = $this->notices = $notices;
-		$this->update_options( $options );
+		$options['notices'] = $notices;
+
+		// update db if changed.
+		if ( $options_before !== $options ) {
+			$this->update_options( $options );
+
+			// update already registered notices.
+			$this->load_notices();
+		}
+
 	}
 
 	/**
@@ -509,8 +492,8 @@ class Advanced_Ads_Ad_Health_Notices {
 		// get notices from options.
 		$options_before = $options = $this->options();
 		if ( ! isset( $options['notices'] )
-		     || ! is_array( $options['notices'] )
-		     || ! isset( $options['notices'][ $notice_key ] ) ) {
+		    || ! is_array( $options['notices'] )
+			|| ! isset( $options['notices'][ $notice_key ] ) ) {
 			return;
 		}
 

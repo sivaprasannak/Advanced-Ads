@@ -139,6 +139,7 @@ class Advanced_Ads_Frontend_Checks {
 				) );
 			}
 
+			/*
 			if ( $this->has_many_the_content && $this->has_the_content_placements() ) {
 				$nodes[] = array( 'type' => 1, 'data' => array(
 					'parent' => 'advanced_ads_ad_health',
@@ -147,7 +148,7 @@ class Advanced_Ads_Frontend_Checks {
 							// translators: %s is a filter hook, here `the_content`
 							__( '<strong>%s</strong> filter found multiple times.', 'advanced-ads' ),
 							'the_content' ),
-					'href'  => false,
+					'href'  => ADVADS_URL . 'manual/ad-health/#the_content_filter_found_multiple_times',
 					'meta'   => array(
 						'class' => 'advanced_ads_ad_health_warning',
 						'target' => '_blank'
@@ -155,6 +156,7 @@ class Advanced_Ads_Frontend_Checks {
 				) );
 				Advanced_Ads_Ad_Health_Notices::get_instance()->add( 'nested_the_content_filters' );
 			}
+			*/
 		    
 			if ( ! empty( $post->ID ) ) {
 				$ad_settings = get_post_meta( $post->ID, '_advads_ad_settings', true );

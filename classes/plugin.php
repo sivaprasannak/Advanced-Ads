@@ -427,7 +427,8 @@ class Advanced_Ads_Plugin {
 	 * @todo parse default options
 	 */
 	public function options() {
-		if ( ! isset( $this->options ) ) {
+		// we can’t store options if WPML String Translations is enabled, or it would not translate the "Ad Label" option
+		if ( ! isset( $this->options ) || class_exists('WPML_ST_String') ) {
 			$this->options = get_option( ADVADS_SLUG, array() );
 		}
 

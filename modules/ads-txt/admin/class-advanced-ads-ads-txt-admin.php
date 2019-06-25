@@ -8,6 +8,8 @@ class Advanced_Ads_Ads_Txt_Admin {
 	 */
 	const adsense = 'adsense';
 
+	const ACTION = 'wp_ajax_advads-ads-txt';
+
 	/**
 	 * Constructor
 	 *
@@ -19,7 +21,7 @@ class Advanced_Ads_Ads_Txt_Admin {
 		add_filter( 'advanced-ads-sanitize-settings', array( $this, 'toggle' ), 10, 1 );
 		add_action( 'update_option_advanced-ads-adsense', array( $this, 'update_adsense_option' ), 10, 2 );
 		add_action( 'advanced-ads-settings-init', array( $this, 'add_settings' ) );
-		add_action( 'wp_ajax_advads-ads-txt', array( $this, 'ajax_refresh_notices' ) );
+		add_action( self::ACTION, array( $this, 'ajax_refresh_notices' ) );
 	}
 
 
@@ -178,6 +180,16 @@ class Advanced_Ads_Ads_Txt_Admin {
 					) );
 				} else {
 					$notices[] = array( '', esc_html__( 'The file was not created.', 'advanced-ads' ) );
+					if ( Advanced_Ads_Checks::wp_engine_hosting() ) {
+						$notices[] = array( '',
+							sprintf(
+								// translators: %s is a service or plugin name.
+								'<strong>' . __( '%s detected.', 'advanced-ads' ) . '</strong>'
+								. ' <a href="' . ADVADS_URL . 'wp-engine-and-ads/#adstxt_not_showing_up">' . __( 'Find the solution here', 'advanced-ads' ) . '</a>',
+								'WP Engine'
+							)
+						);
+					}
 				}
 
 				if ( $file['is_third_party'] ) {
@@ -218,6 +230,18 @@ class Advanced_Ads_Ads_Txt_Admin {
 	}
 
 	/**
+	 * Check if the `ads.txt` file is displayed to visitors.
+	 *
+	 * @return bool True if displayed, False otherwise.
+	 */
+	public static function is_displayed() {
+		$url = home_url( '/' );
+
+		$file = self::get_notice( 'get_file_info', $url );
+		return is_array( $file ) && ! empty( $file['exists'] );
+	}
+
+	/**
 	 * Get a notice.
 	 *
 	 * @return null/bool Boolean on success or null if no cached data exists.
@@ -234,7 +258,7 @@ class Advanced_Ads_Ads_Txt_Admin {
 		$key = self::get_transient_key();
 		$transient = get_transient( $key );
 
-		if ( ! $is_ajax ) {
+		if ( ! $is_ajax || ! doing_action( self::ACTION ) ) {
 			return isset( $transient[ $func ] ) ? $transient[ $func ] : null;
 		}
 

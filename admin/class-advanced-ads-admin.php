@@ -99,8 +99,6 @@ class Advanced_Ads_Admin {
 
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 
-		add_action( 'admin_post_deactivate_plugin', array( $this, 'advanced_ads_deactivate_plugin' ));
-		
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 9 );
@@ -384,21 +382,6 @@ class Advanced_Ads_Admin {
 			// allow other Advanced Ads plugins to show admin notices at this late stage
 			do_action( 'advanced-ads-admin-notices');
 		}
-		
-	}
-
-	/**
-     * Deativate plugins
-    */
-	public function advanced_ads_deactivate_plugin() {
-		if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'deactivate_plugin' ) ) {
-			wp_nonce_ays( '' );
-		}
-	
-		deactivate_plugins( $_GET['plugin'] );
-	
-		wp_safe_redirect( wp_get_referer() );
-		die();
 	}
 
 	/**

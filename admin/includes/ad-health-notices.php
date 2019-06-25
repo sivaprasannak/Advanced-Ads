@@ -190,7 +190,7 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 			'type' => 'problem',
 			'hide' => false,
 		),
-		// AdSense account alert.
+		// AdSense account alert. Missing ads.txt – version 1.
 		'adsense_alert_ALERT_TYPE_ADS_TXT_UNAUTHORIZED' => array(
 			'text' => sprintf(
 				__( 'One of your sites is missing the AdSense publisher ID in the ads.txt file.', 'advanced-ads' )
@@ -198,6 +198,15 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 				. _x( 'Create one now.', 'related to ads.txt file', 'advanced-ads' ) . '</a>',
 				admin_url( 'admin.php?page=advanced-ads-settings#general__advads-ads-txt' )
 			) . ' ' . Advanced_Ads_Ad_Health_Notices::get_adsense_error_link( 'ALERT_TYPE_ADS_TXT_UNAUTHORIZED' ),
+			'type' => 'problem',
+		), // AdSense account alert. . Missing ads.txt – version 2.
+		'adsense_alert_ADS_TXT_MISSING' => array(
+			'text' => sprintf(
+				__( 'One of your sites is missing the AdSense publisher ID in the ads.txt file.', 'advanced-ads' )
+				. ' <a class="advads-settings-link" href="%s">'
+				. _x( 'Create one now.', 'related to ads.txt file', 'advanced-ads' ) . '</a>',
+				admin_url( 'admin.php?page=advanced-ads-settings#general__advads-ads-txt' )
+			) . ' ' . Advanced_Ads_Ad_Health_Notices::get_adsense_error_link( 'ADS_TXT_MISSING' ),
 			'type' => 'problem',
 		),
 		'nested_the_content_filters'                    => array(
@@ -208,6 +217,7 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 			) . '&nbsp;' . __( 'Advanced Ads uses the outermost of them.', 'advanced-ads' ),
 			'get_help_link' => ADVADS_URL . 'manual/ad-health/?utm_source=advanced-ads&utm_medium=link&utm_campaign=error-multiple-the-content#the_content_filter_found_multiple_times',
 			'type'          => 'notice',
+			'hide'          => false,
 		),
 		// BuddyPress installed.
 		'buddypress_no_pro'                             => array(
@@ -263,48 +273,12 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 			'text'    => sprintf(
 				// translators: %s is a service or plugin name.
 				'<strong>' . __( '%s detected.', 'advanced-ads' ) . '</strong>'
-				. ' <a href="' . ADVADS_URL . 'wp-engine-and-ads/#utm_source=advanced-aads&utm_medium=link&utm_campaign=notice-wpengine">' . __( 'Learn how this might impact your ad setup.', 'advanced-ads' ) . '</a>',
+				. ' <a href="' . ADVADS_URL . 'wp-engine-and-ads/#utm_source=advanced-ads&utm_medium=link&utm_campaign=notice-wpengine">' . __( 'Learn how this might impact your ad setup.', 'advanced-ads' ) . '</a>',
 				'WP Engine'
 			),
 			'type'    => 'notice',
 			'hide'    => false,
 			'timeout' => YEAR_IN_SECONDS,
-		),
-		'ads_txt_manager'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Manager is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br> Ads.txt Manager <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt/ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
-		),
-		'ads_txt_admin'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Admin is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br> Ads.txt Admin <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt-admin/unveil-media-ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
-		),
-		'simple_ads_txt'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Simple ads.txt is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br>Simple ads.txt <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'simple-ads-txt/bs_ads_txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
-		),
-		'adstxtmanager'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Manager is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br>Ads.txt Manager <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'ads-txt-manager/adstxtmanager.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
-		),
-		'monetizemore'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br> Ads.txt <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'monetizemore-ads-txt/wp-ads-txt.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
-		),
-		'ads_txt_publisher'                                      => array(
-			'text'    =>   __( '<strong>Advanced Ads</strong>: Ads.txt Publisher is not compatible with our plugin and may cause unexpected results:', 'advanced-ads' )
-							.'<br><br> Ads.txt Publisher <a href="' . wp_nonce_url( admin_url( 'admin-post.php?action=deactivate_plugin&plugin=' . urlencode( 'authorized-sellers-manager/ads-txt-publisher.php') ), 'deactivate_plugin' ) . '" class="button-secondary alignright">' . __( 'Deactivate', 'advanced-ads' ) . '</a>',
-			'type'    => 'problem',
-			'hide'    => true,
 		),
 	)
 );

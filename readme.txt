@@ -288,6 +288,15 @@ Yes. Advanced Ads is based on WordPress standards and therefore easily customiza
 
 == Changelog ==
 
+= untagged =
+
+* added a hint about solving ads.txt issue on WP Engine platform
+* allow to translate Ad Label option if WPML String Translation is used
+* fixed Ad Health notices showing also ignored issues when adding a new notice
+* inject ads in the outermost `the_content` when they may have been injected in an inner `the_content`
+* added chain of nested `the_content` filters to `debug.log` to allow reasoning about possible issues
+* prevented warning about missing ads.txt file when the file exists
+
 = 1.13.7 =
 
 * set `ADVANCED_ADS_DISABLE_EDIT_BAR` to disable frontend edit bar

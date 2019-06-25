@@ -73,6 +73,13 @@ class Advanced_Ads {
 	protected $internal_options = false;
 
 	/**
+	 * Whether the loop started in an inner `the_content`.
+	 *
+	 * @var bool
+	 */
+	protected $was_in_the_loop = false;
+
+	/**
 	 * List of bots and crawlers to exclude from ad impressions
 	 *
 	 * @since 1.4.9
@@ -134,6 +141,8 @@ class Advanced_Ads {
 
 		// allow add-ons to interact.
 		add_action( 'init', array( $this, 'advanced_ads_loaded' ), 9 );
+
+		add_filter( 'the_content', array( $this, 'set_was_in_the_loop' ), ~PHP_INT_MAX );
 	}
 
 	/**
@@ -446,6 +455,14 @@ class Advanced_Ads {
 		}
 
 		if ( $this->has_many_the_content() ) {
+			if ( current_user_can( 'advanced_ads_place_ads' ) ) {
+				global $wp;
+				Advanced_Ads::log( sprintf( 'More then one `the_content` in the stack (%s): %s, %s',
+					ADVADS_URL . 'manual/ad-health/#the_content_filter_found_multiple_times',
+					isset( $wp->request ) ? $wp->request : '',
+					wp_debug_backtrace_summary() )
+				);
+			}
 			return $content;
 		}
 
@@ -483,7 +500,7 @@ class Advanced_Ads {
 		if ( ! isset( $options['content-injection-everywhere'] ) || 0 === $options['content-injection-everywhere'] ) {
 					// check if this is a singular page within the loop or an AMP page.
 					$is_amp = advads_is_amp();
-			if ( ( ! is_singular( $public_post_types ) && ! is_feed() ) || ( ! $is_amp && ! in_the_loop() ) ) {
+			if ( ( ! is_singular( $public_post_types ) && ! is_feed() ) || ( ! $is_amp && ! in_the_loop() && ! $this->was_in_the_loop ) ) {
 				return $content; }
 		} else {
 					global $wp_query;
@@ -935,5 +952,27 @@ class Advanced_Ads {
 			restore_current_blog();
 			self::get_instance()->get_model()->reset_placement_array();
 		}
+	}
+
+	/**
+	 * Store whether the loop started in an inner `the_content`.
+	 *
+	 * If so, let us assume that we are in the loop when we are in the outermost `the_content`.
+	 * Makes sense only when a hooked to `the_content` function that produces an inner `the_content` has
+	 * lesser priority then `$this->plugin->get_content_injection_priority()`.
+	 *
+	 * @param string Post content.
+	 * @param string Post content (unchanged).
+	 */
+	function set_was_in_the_loop( $content ) {
+		if ( Advanced_Ads::get_instance()->has_many_the_content() ) {
+			$this->was_in_the_loop = $this->was_in_the_loop || in_the_loop();
+		} else {
+			// Next top level `the_content`, forget that the loop started.
+			$this->was_in_the_loop = false;
+		}
+
+
+		return $content;
 	}
 }
