@@ -280,5 +280,13 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 			'hide'    => false,
 			'timeout' => YEAR_IN_SECONDS,
 		),
+		'conflict_plugins_deactivate'                   => array(
+			'text'    =>  sprintf(
+				__( 'Plugins that are known to cause problems: <strong>%1$s</strong>.', 'advanced-ads' ),
+				implode( ', ', Advanced_Ads_Checks::conflict_plugins_deactivate() )
+			),
+			'type'    => 'problem',
+			'hide'    => true,
+		),
 	)
 );

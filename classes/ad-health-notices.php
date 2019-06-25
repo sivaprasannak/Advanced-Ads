@@ -100,12 +100,6 @@ class Advanced_Ads_Ad_Health_Notices {
 			return;
 		}
 
-		// load default notices.
-		if ( array() === $this->default_notices ) {
-			include ADVADS_BASE_PATH . '/admin/includes/ad-health-notices.php';
-			$this->default_notices = $advanced_ads_ad_health_notices;
-		}
-
 		// fills the class arrays.
 		$this->load_notices();
 
@@ -231,6 +225,12 @@ class Advanced_Ads_Ad_Health_Notices {
 			return;
 		}
 
+		// load default notices.
+		if ( array() === $this->default_notices ) {
+			include ADVADS_BASE_PATH . '/admin/includes/ad-health-notices.php';
+			$this->default_notices = $advanced_ads_ad_health_notices;
+		}
+
 		$this->checks();
 	}
 
@@ -306,6 +306,11 @@ class Advanced_Ads_Ad_Health_Notices {
 		}
 		if ( Advanced_Ads_Checks::wp_engine_hosting() ) {
 			$this->add( 'wpengine' );
+		}
+		if ( count( Advanced_Ads_Checks::conflict_plugins_deactivate() ) ) {
+			$this->add( 'conflict_plugins_deactivate' );
+		} else {
+			$this->remove( 'conflict_plugins_deactivate' );
 		}
 
 		set_transient( self::DAILY_CHECK_TRANSIENT_NAME, true, DAY_IN_SECONDS );

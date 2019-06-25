@@ -221,6 +221,30 @@ class Advanced_Ads_Checks {
 		return $conflicting_plugins;
 	}
 	
+	public static function conflict_plugins_deactivate(){
+
+		$conflict_plugins_deactivate = array();
+		if ( is_plugin_active( 'ads-txt/ads-txt.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Ads.txt Manager';
+		}
+		if ( is_plugin_active( 'ads-txt-admin/unveil-media-ads-txt.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Ads.txt Admin';
+		}
+		if ( is_plugin_active( 'simple-ads-txt/bs_ads_txt.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Simple Ads.txt';
+		}
+		if ( is_plugin_active( 'ads-txt-manager/adstxtmanager.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Ads.txt Manager';
+		}
+		if ( is_plugin_active( 'monetizemore-ads-txt/wp-ads-txt.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Ads.txt';
+		}
+		if ( is_plugin_active( 'authorized-sellers-manager/ads-txt-publisher.php' ) ) {
+			$conflict_plugins_deactivate[] = 'Ads.txt Publisher';
+		}
+		return $conflict_plugins_deactivate;
+	}
+	
 	/**
 	 * check if any of the global hide ads options is set
 	 * ignore RSS feed setting, because it is standard
